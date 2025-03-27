@@ -14,7 +14,10 @@ const buildingSchema = zod.object({
   id: zod.number().optional(),
   code: zod.string().min(1, 'Code is required'),
   description: zod.string().min(1, 'Description is required'),
-  campus: zod.string().min(1, 'Campus is required'),
+  campus: zod.preprocess(
+    (val) => (val === '' ? undefined : Number(val)),
+    zod.number({ required_error: 'Campus is required' })
+  ),
 });
 
 export default function Main() {
@@ -73,7 +76,7 @@ export default function Main() {
       setValue('description', selectedBuilding.name);
       setValue('campus', selectedBuilding.campusId);
     } else {
-      reset(); // Reset form if not editing
+      reset();
     }
   }, [editMode, data, setValue, reset]);
 
@@ -97,7 +100,7 @@ export default function Main() {
                         variant="outlined"
                         fullWidth
                         error={!!errors.code}
-                        helperText={errors.code ? 'Code is required' : ''}
+                        helperText={errors.code?.message}
                       />
                     )}
                   />
@@ -118,7 +121,7 @@ export default function Main() {
                         variant="outlined"
                         fullWidth
                         error={!!errors.description}
-                        helperText={errors.description ? 'Description is required' : ''}
+                        helperText={errors.description?.message}
                       />
                     )}
                   />
@@ -141,7 +144,7 @@ export default function Main() {
                         fullWidth
                         {...register('campus')}
                         error={!!errors.campus}
-                        helperText={errors.campus ? errors.campus.message : ''}
+                        helperText={errors.campus?.message}
                       >
                         {campuses.map((campus) => (
                           <MenuItem key={campus.ID} value={campus.ID}>

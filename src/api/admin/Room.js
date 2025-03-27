@@ -31,10 +31,10 @@ export const createRoom = async (formData, formId) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Error creating faculty type');
+    throw new Error(errorData.message || 'Error creating room');
   }
 
-  return formId ? 'Faculty type updated successfully!' : 'Faculty type created successfully!';
+  return formId ? 'Room updated successfully!' : 'Room created successfully!';
 };
 
 /**
@@ -42,4 +42,18 @@ export const createRoom = async (formData, formId) => {
  */
 export const courseList = () => {
   return useFetchData(`${API_URL}/course/list?fields=ID,DESCRIPTION`);
+};
+
+/**
+ * Fetch Campus
+ */
+export const campusList = () => {
+  return useFetchData(`${API_URL}/campus/list?fields=ID,NAME`);
+};
+
+/**
+ * Fecth Building
+ */
+export const buildingList = () => {
+  return useFetchData(`${API_URL}/building/list?fields=ID,NAME`);
 };

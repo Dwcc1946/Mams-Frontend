@@ -71,15 +71,15 @@ export function RoomTransferList() {
   };
 
   const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
+    setRight([...right, ...leftChecked]); // Move checked items to the right
+    setLeft(left.filter((item) => !leftChecked.includes(item))); // Remove checked items from the left list
+    setChecked(checked.filter((item) => !leftChecked.includes(item))); // Uncheck moved items
   };
 
   const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
+    setLeft([...left, ...rightChecked]); // Move checked items to the left
+    setRight(right.filter((item) => !rightChecked.includes(item))); // Remove checked items from the right list
+    setChecked(checked.filter((item) => !rightChecked.includes(item))); // Uncheck moved items
   };
 
   const customList = (title, items) => (
@@ -117,16 +117,16 @@ export function RoomTransferList() {
         }}
       >
         {items.map((value) => (
-          <ListItemButton key={courses.ID} role="listitem" onClick={handleToggle(courses.ID)}>
+          <ListItemButton key={value.ID} role="listitem" onClick={handleToggle(value)}>
             <ListItemIcon>
               <Checkbox
                 disableRipple
-                checked={checked.indexOf(courses.ID) !== -1}
+                checked={checked.includes(value)}
                 tabIndex={-1}
-                inputProps={{ 'aria-labelledby': `transfer-list-all-item-${courses.ID}-label` }}
+                inputProps={{ 'aria-labelledby': `transfer-list-all-item-${value.ID}-label` }}
               />
             </ListItemIcon>
-            <ListItemText id={`transfer-list-all-item-${courses.ID}-label`} primary={courses.DESCRIPTION} />
+            <ListItemText id={`transfer-list-all-item-${value.ID}-label`} primary={value.DESCRIPTION} />
           </ListItemButton>
         ))}
       </List>
