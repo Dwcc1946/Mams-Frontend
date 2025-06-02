@@ -30,7 +30,7 @@ function union(a, b) {
 
 // ----------------------------------------------------------------------
 
-export function RoomTransferList() {
+export function RoomTransferList({ onChange }) {
   const [checked, setChecked] = useState([]);
 
   const { data: courses } = courseList();
@@ -43,6 +43,12 @@ export function RoomTransferList() {
       setLeft(courses);
     }
   }, [courses]);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(right);
+    }
+  }, [right, onChange]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);

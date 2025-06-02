@@ -55,7 +55,7 @@ export default function Main() {
       building: '',
       floor: '',
       capacity: '',
-      roomType: 'Air Conditioned',
+      roomType: 'yes',
       scheduleConflict: 'Exclude',
     },
   });
@@ -64,11 +64,17 @@ export default function Main() {
   const { data, loading, refetch } = fetchRoom();
   const { data: campuses } = campusList();
   const { data: buildings } = buildingList();
+  const [assignedCourses, setAssignedCourses] = useState([]);
 
   const onSubmit = (formData) => {
     const roomId = editMode ? formData.id : null;
 
-    const promise = createRoom(formData, roomId).then((msg) => {
+    const payload = {
+      ...formData,
+      assignedCourses,
+    };
+
+    const promise = createRoom(payload, roomId).then((msg) => {
       handleReset();
       refetch();
       return msg;
@@ -237,7 +243,7 @@ export default function Main() {
                     name="scheduleConflict"
                     control={control}
                     render={({ field }) => (
-                      <RadioGroup row {...field}>
+                      <RadioGroup row value={field.value} onChange={(e) => field.onChange(e.target.value)}>
                         <FormControlLabel value="Include" control={<Radio />} label="Include" />
                         <FormControlLabel value="Exclude" control={<Radio />} label="Exclude" />
                       </RadioGroup>
@@ -252,7 +258,7 @@ export default function Main() {
               <Box sx={{ mt: 4, width: '100%' }}>
                 <FormControl component="fieldset" fullWidth>
                   <FormLabel component="legend">Course Assignment</FormLabel>
-                  <RoomTransferList />
+                  <RoomTransferList onChange={setAssignedCourses} />
                 </FormControl>
               </Box>
             </Grid>

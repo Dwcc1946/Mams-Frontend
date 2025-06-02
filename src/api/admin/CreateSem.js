@@ -36,7 +36,6 @@ export const createSem = async (formData) => {
 /**
  * Make present
  */
-
 export const makePresentSem = async (id) => {
   const response = await fetch(`${API_URL}/create_sem/make-present`, {
     method: 'POST',
